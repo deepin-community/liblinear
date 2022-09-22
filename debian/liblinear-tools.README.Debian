@@ -1,0 +1,11 @@
+liblinear for Debian
+--------------------
+
+For more information (including formulations) about LIBLINEAR, you are strongly
+advised to read upstream's README file in /usr/share/doc/liblinear4/README.
+
+Upstream calls its binary executables "train" and "predict". To avoid possible
+name collisions, these binaries (available in the liblinear-tools package) have
+been renamed to "liblinear-train" and "liblinear-predict".
+
+ -- Christian Kastner <ckk@debian.org>  Mon, 21 Oct 2019 23:49:50 +0200

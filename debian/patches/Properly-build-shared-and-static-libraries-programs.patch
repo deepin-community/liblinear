@@ -1,0 +1,96 @@
+From: Christian Kastner <debian@kvr.at>
+Date: Fri, 9 Jul 2010 18:09:09 +0200
+Subject: Properly build shared and static libraries, programs
+
+Modify upstream's Makefile to properly build shared and static libraries,
+and link upstream's programs to the shared libraries. Furthermore, provide
+and install target.
+
+Forwarded: not-needed
+Last-Update: 2016-04-24
+---
+ Makefile | 66 +++++++++++++++++++++++++++++++++++++++++++---------------------
+ 1 file changed, 45 insertions(+), 21 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 99fdece..6f0a0f9 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,32 +1,56 @@
+ CXX ?= g++
+ CC ?= gcc
+-CFLAGS = -Wall -Wconversion -O3 -fPIC
+-LIBS =
++CFLAGS +=
++LDFLAGS += -L.
++LIBS +=
+ SHVER = 3
+-OS = $(shell uname)
+ 
+-all: train predict
++# Libraries must not be compiled/linked with -pie, -fpie or -FPIE
++LIB_CFLAGS += $(filter-out -fPIE,$(CFLAGS)) -fPIC
++LIB_LDFLAGS += $(filter-out -fPIE, $(filter-out -pie,$(LDFLAGS)))
++LIB_LIBS += $(LIBS) -lblas
+ 
+-lib: linear.o tron.o
+-	if [ "$(OS)" = "Darwin" ]; then \
+-		SHARED_LIB_FLAG="-dynamiclib -Wl,-install_name,liblinear.so.$(SHVER)"; \
+-	else \
+-		SHARED_LIB_FLAG="-shared -Wl,-soname,liblinear.so.$(SHVER)"; \
+-	fi; \
+-	$(CXX) $${SHARED_LIB_FLAG} linear.o tron.o -o liblinear.so.$(SHVER)
++PROG_CFLAGS += $(CFLAGS)
++PROG_LDFLAGS += $(LDFLAGS)
++PROG_LIBS += $(LIBS) -llinear
+ 
+-train: tron.o linear.o train.c
+-	$(CXX) $(CFLAGS) -o train train.c tron.o linear.o $(LIBS)
++DMAJOR ?= 0
++DMINOR ?= 0
++LIBFILE = liblinear.so.$(SHVER).$(DMAJOR).$(DMIJOR)
+ 
+-predict: tron.o linear.o predict.c
+-	$(CXX) $(CFLAGS) -o predict predict.c tron.o linear.o $(LIBS)
++bindir ?= /usr/bin/
++libdir ?= /usr/lib/
++bindest = $(DESTDIR)$(bindir)
++libdest = $(DESTDIR)$(libdir)
+ 
+-tron.o: tron.cpp tron.h
+-	$(CXX) $(CFLAGS) -c -o tron.o tron.cpp
+ 
+-linear.o: linear.cpp linear.h
+-	$(CXX) $(CFLAGS) -c -o linear.o linear.cpp
++all: liblinear-train liblinear-predict liblinear.a
++
++liblinear-train: train.c $(LIBFILE)
++	$(CXX) $(CPPFLAGS) $(PROG_CFLAGS) $(PROG_LDFLAGS) -o $@ train.c $(PROG_LIBS)
++
++liblinear-predict: predict.c $(LIBFILE)
++	$(CXX) $(CPPFLAGS) $(PROG_CFLAGS) $(PROG_LDFLAGS) -o $@ predict.c $(PROG_LIBS)
++
++$(LIBFILE): linear.cpp linear.h tron.cpp tron.h
++	$(CXX) $(CPPFLAGS) $(LIB_CFLAGS) $(LIB_LDFLAGS) -shared \
++		-Wl,-soname,liblinear.so.$(SHVER) \
++		-o $@ linear.cpp tron.cpp $(LIB_LIBS)
++	ln -s $@ liblinear.so.$(SHVER)
++	ln -s liblinear.so.$(SHVER) liblinear.so
++
++liblinear.a:
++	$(CXX) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -c -o linear-static.o linear.cpp
++	$(CXX) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -c -o tron-static.o tron.cpp
++	ar cru liblinear.a linear-static.o tron-static.o
++
++install: all
++	install -d $(bindest) $(libdest)
++	install liblinear-train liblinear-predict -m 755 $(bindest)
++	install liblinear.a -m 644 $(libdest)
++	install $(LIBFILE) -m 644 $(libdest)
++	cd $(libdest) && ln -s $(LIBFILE) liblinear.so.$(SHVER)
++	cd $(libdest) && ln -s liblinear.so.$(SHVER) liblinear.so
+ 
+ clean:
+-	make -C matlab clean
+-	rm -f *~ tron.o linear.o train predict liblinear.so.$(SHVER)
++	rm -f *~ *.o *.a *.so* liblinear-train liblinear-predict

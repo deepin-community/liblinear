@@ -1,0 +1,95 @@
+Source: liblinear
+Section: libs
+Priority: optional
+Maintainer: Debian Science Maintainers <debian-science-maintainers@lists.alioth.debian.org>
+Uploaders: Christian Kastner <ckk@debian.org>,
+           Chen-Tse Tsai <ctse.tsai@gmail.com>,
+           Michael Hudson-Doyle <mwhudson@debian.org>
+Build-Depends:
+    debhelper-compat (= 12),
+    libblas-dev
+Build-Depends-Indep:
+    dh-python,
+    python3-all,
+Rules-Requires-Root: no
+Standards-Version: 4.5.0
+Homepage: https://www.csie.ntu.edu.tw/~cjlin/liblinear/
+Vcs-Git: https://salsa.debian.org/science-team/liblinear.git
+Vcs-Browser: https://salsa.debian.org/science-team/liblinear
+
+Package: liblinear-dev
+Section: libdevel
+Architecture: any
+Multi-Arch: same
+Depends:
+    ${misc:Depends},
+    liblinear4 (= ${binary:Version}),
+    libblas-dev | libblas.so
+Description: Development libraries and header files for LIBLINEAR
+ LIBLINEAR is a library for learning linear classifiers for large scale
+ applications. It supports Support Vector Machines (SVM) with L2 and L1
+ loss, logistic regression, multi class classification and also Linear
+ Programming Machines (L1-regularized SVMs). Its computational complexity
+ scales linearly with the number of training examples making it one of
+ the fastest SVM solvers around.
+ .
+ This package contains the header files and static libraries.
+
+Package: liblinear4
+Architecture: any
+Multi-Arch: same
+Pre-Depends:
+    ${misc:Pre-Depends}
+Depends:
+    ${shlibs:Depends},
+    ${misc:Depends}
+Suggests:
+    liblinear-tools (= ${binary:Version}),
+    liblinear-dev (= ${binary:Version})
+Description: Library for Large Linear Classification
+ LIBLINEAR is a library for learning linear classifiers for large scale
+ applications. It supports Support Vector Machines (SVM) with L2 and L1
+ loss, logistic regression, multi class classification and also Linear
+ Programming Machines (L1-regularized SVMs). Its computational complexity
+ scales linearly with the number of training examples making it one of
+ the fastest SVM solvers around. It also provides Python bindings.
+ .
+ This package contains the shared libraries.
+
+Package: liblinear-tools
+Section: science
+Architecture: any
+Multi-Arch: foreign
+Depends:
+    ${shlibs:Depends},
+    ${misc:Depends},
+    liblinear4 (= ${binary:Version})
+Suggests:
+    libsvm-tools
+Description: Standalone applications for LIBLINEAR
+ LIBLINEAR is a library for learning linear classifiers for large scale
+ applications. It supports Support Vector Machines (SVM) with L2 and L1
+ loss, logistic regression, multi class classification and also Linear
+ Programming Machines (L1-regularized SVMs). Its computational complexity
+ scales linearly with the number of training examples making it one of
+ the fastest SVM solvers around. It also provides Python bindings.
+ .
+ This package contains the standalone applications.
+
+Package: python3-liblinear
+Section: python
+Architecture: all
+Depends:
+    ${python3:Depends},
+    ${misc:Depends},
+    liblinear4 (>= ${binary:Version}),
+    liblinear4 (<< ${binary:Version}.1~)
+Description: Python 3 bindings for LIBLINEAR
+ LIBLINEAR is a library for learning linear classifiers for large scale
+ applications. It supports Support Vector Machines (SVM) with L2 and L1
+ loss, logistic regression, multi class classification and also Linear
+ Programming Machines (L1-regularized SVMs). Its computational complexity
+ scales linearly with the number of training examples making it one of
+ the fastest SVM solvers around. It also provides Python bindings.
+ .
+ This package contains the Python 3 bindings.

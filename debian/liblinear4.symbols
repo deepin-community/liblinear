@@ -1,0 +1,85 @@
+liblinear.so.4 liblinear4 #MINVER#
+* Build-Depends-Package: liblinear-dev
+ (c++)"compare_double(void const*, void const*)@Base" 2.01+dfsg
+ (c++)"solve_l2r_lr_dual(problem const*, double*, double, double, double)@Base" 2.01+dfsg
+ (c++)"l2r_lr_fun::get_nr_variable()@Base" 2.01+dfsg
+ (c++)"l2r_lr_fun::Hv(double*, double*)@Base" 2.01+dfsg
+ (c++)"l2r_lr_fun::Xv(double*, double*)@Base" 2.01+dfsg
+ (c++)"l2r_lr_fun::XTv(double*, double*)@Base" 2.01+dfsg
+ (c++)"l2r_lr_fun::fun(double*)@Base" 2.01+dfsg
+ (c++)"l2r_lr_fun::grad(double*, double*)@Base" 2.01+dfsg
+ (c++)"l2r_lr_fun::l2r_lr_fun(problem const*, double*)@Base" 2.01+dfsg
+ (c++)"l2r_lr_fun::l2r_lr_fun(problem const*, double*)@Base" 2.01+dfsg
+ (c++)"l2r_lr_fun::~l2r_lr_fun()@Base" 2.01+dfsg
+ (c++)"l2r_lr_fun::~l2r_lr_fun()@Base" 2.01+dfsg
+ (c++)"l2r_lr_fun::~l2r_lr_fun()@Base" 2.01+dfsg
+ (c++)"l2r_l2_svc_fun::get_nr_variable()@Base" 2.01+dfsg
+ (c++)"l2r_l2_svc_fun::Hv(double*, double*)@Base" 2.01+dfsg
+ (c++)"l2r_l2_svc_fun::Xv(double*, double*)@Base" 2.01+dfsg
+ (c++)"l2r_l2_svc_fun::fun(double*)@Base" 2.01+dfsg
+ (c++)"l2r_l2_svc_fun::grad(double*, double*)@Base" 2.01+dfsg
+ (c++)"l2r_l2_svc_fun::subXTv(double*, double*)@Base" 2.01+dfsg
+ (c++)"l2r_l2_svc_fun::l2r_l2_svc_fun(problem const*, double*)@Base" 2.01+dfsg
+ (c++)"l2r_l2_svc_fun::l2r_l2_svc_fun(problem const*, double*)@Base" 2.01+dfsg
+ (c++)"l2r_l2_svc_fun::~l2r_l2_svc_fun()@Base" 2.01+dfsg
+ (c++)"l2r_l2_svc_fun::~l2r_l2_svc_fun()@Base" 2.01+dfsg
+ (c++)"l2r_l2_svc_fun::~l2r_l2_svc_fun()@Base" 2.01+dfsg
+ (c++)"l2r_l2_svr_fun::fun(double*)@Base" 2.01+dfsg
+ (c++)"l2r_l2_svr_fun::grad(double*, double*)@Base" 2.01+dfsg
+ (c++)"l2r_l2_svr_fun::l2r_l2_svr_fun(problem const*, double*, double)@Base" 2.01+dfsg
+ (c++)"l2r_l2_svr_fun::l2r_l2_svr_fun(problem const*, double*, double)@Base" 2.01+dfsg
+ (c++)"l2r_l2_svr_fun::~l2r_l2_svr_fun()@Base" 2.01+dfsg
+ (c++)"l2r_l2_svr_fun::~l2r_l2_svr_fun()@Base" 2.01+dfsg
+ (c++)"l2r_l2_svr_fun::~l2r_l2_svr_fun()@Base" 2.01+dfsg
+ (c++)"l2r_lr_fun::get_diag_preconditioner(double*)@Base" 2.3.0+dfsg
+ (c++)"l2r_l2_svc_fun::get_diag_preconditioner(double*)@Base" 2.3.0+dfsg
+ (c++)"Solver_MCSVM_CS::solve_sub_problem(double, int, double, int, double*)@Base" 2.01+dfsg
+ (c++)"Solver_MCSVM_CS::Solve(double*)@Base" 2.01+dfsg
+ (c++)"Solver_MCSVM_CS::be_shrunk(int, int, int, double, double)@Base" 2.01+dfsg
+ (c++)"Solver_MCSVM_CS::Solver_MCSVM_CS(problem const*, int, double*, double, int)@Base" 2.01+dfsg
+ (c++)"Solver_MCSVM_CS::Solver_MCSVM_CS(problem const*, int, double*, double, int)@Base" 2.01+dfsg
+ (c++)"Solver_MCSVM_CS::~Solver_MCSVM_CS()@Base" 2.01+dfsg
+ (c++)"Solver_MCSVM_CS::~Solver_MCSVM_CS()@Base" 2.01+dfsg
+ (c++)"TRON::set_print_string(void (*)(char const*))@Base" 2.01+dfsg
+ (c++)"TRON::info(char const*, ...)@Base" 2.01+dfsg
+ (c++)"TRON::trpcg(double, double*, double*, double*, double*, bool*)@Base" 2.3.0+dfsg
+ (c++)"TRON::tron(double*)@Base" 2.01+dfsg
+ (c++)"TRON::norm_inf(int, double*)@Base" 2.01+dfsg
+ (c++)"TRON::TRON(function const*, double, double, int)@Base" 2.01+dfsg
+ (c++)"TRON::TRON(function const*, double, double, int)@Base" 2.01+dfsg
+ (c++)"TRON::~TRON()@Base" 2.01+dfsg
+ (c++)"TRON::~TRON()@Base" 2.01+dfsg
+ (c++|optional)"function::~function()@Base" 2.01+dfsg
+ (c++)"typeinfo for l2r_lr_fun@Base" 2.01+dfsg
+ (c++)"typeinfo for l2r_l2_svc_fun@Base" 2.01+dfsg
+ (c++)"typeinfo for l2r_l2_svr_fun@Base" 2.01+dfsg
+ (c++)"typeinfo for function@Base" 2.01+dfsg
+ (c++)"typeinfo name for l2r_lr_fun@Base" 2.01+dfsg
+ (c++)"typeinfo name for l2r_l2_svc_fun@Base" 2.01+dfsg
+ (c++)"typeinfo name for l2r_l2_svr_fun@Base" 2.01+dfsg
+ (c++)"typeinfo name for function@Base" 2.01+dfsg
+ (c++)"vtable for l2r_lr_fun@Base" 2.01+dfsg
+ (c++)"vtable for l2r_l2_svc_fun@Base" 2.01+dfsg
+ (c++|optional)"vtable for function@Base" 2.01+dfsg
+ (c++)"vtable for l2r_l2_svr_fun@Base" 2.01+dfsg
+ check_parameter@Base 2.01+dfsg
+ check_probability_model@Base 2.01+dfsg
+ check_regression_model@Base 2.01+dfsg
+ cross_validation@Base 2.01+dfsg
+ destroy_param@Base 2.01+dfsg
+ find_parameters@Base 2.3.0+dfsg
+ free_and_destroy_model@Base 2.01+dfsg
+ free_model_content@Base 2.01+dfsg
+ get_decfun_bias@Base 2.01+dfsg
+ get_decfun_coef@Base 2.01+dfsg
+ get_labels@Base 2.01+dfsg
+ get_nr_class@Base 2.01+dfsg
+ get_nr_feature@Base 2.01+dfsg
+ load_model@Base 2.01+dfsg
+ liblinear_version@Base 2.3.0+dfsg
+ predict@Base 2.01+dfsg
+ predict_probability@Base 2.01+dfsg
+ predict_values@Base 2.01+dfsg
+ save_model@Base 2.01+dfsg
+ set_print_string_function@Base 2.01+dfsg
+ train@Base 2.01+dfsg

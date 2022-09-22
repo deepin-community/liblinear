@@ -1,0 +1,242 @@
+\"                                      Hey, EMACS: -*- nroff -*-
+.TH LIBLINEAR-TRAIN 1 "October 21, 2019"
+.SH NAME
+liblinear-train \- train a linear classifier and produce a model
+.SH SYNOPSIS
+.B liblinear-train
+.RI [ options ] " training_set_file " [ model_file ] 
+.br
+.SH DESCRIPTION
+\fBliblinear-train\fP trains a linear classifier using liblinear and produces a
+model suitable for use with \fBliblinear-predict\fP(1).
+
+\fItraining_set_file\fP is the file containing the data used for training.
+\fImodel_file\fP is the file to which the model will be saved. If
+\fImodel_file\fP is not provided, it defaults to \fItraining_set_file.model\fP.
+
+To obtain good performances, sometimes one needs to scale the data. This can be
+done with \fBsvm-scale\fP(1).
+.SH OPTIONS
+A summary of options is included below.
+.TP
+.B \-s \fItype\fP
+Set the type of the solver (default \fB1\fP):
+.sp
+.RS 8
+.nf
+for multi-class classification
+.fi
+.RE
+.sp
+.RS 10
+.nf
+0 ... L2-regularized logistic regression (primal)
+.sp
+1 ... L2-regularized L2-loss support vector classification (dual)
+.sp
+2 ... L2-regularized L2-loss support vector classification (primal)
+.sp
+3 ... L2-regularized L1-loss support vector classification (dual)
+.sp
+4 ... multi-class support vector classification
+.sp
+5 ... L1-regularized L2-loss support vector classification
+.sp
+6 ... L1-regularized logistic regression
+.sp
+7 ... L2-regularized logistic regression (dual)
+.sp
+.fi
+.RE
+.RS 8
+.nf
+for regression
+.fi
+.RE
+.sp
+.RS 10
+.nf
+.sp
+11 ... L2-regularized L2-loss support vector regression (primal)
+.sp
+12 ... L2-regularized L2-loss support vector regression (dual)
+.sp
+13 ... L2-regularized L1-loss support vector regression (dual)
+.fi
+.RE
+.TP
+.B \-c \fIcost\fP
+Set the parameter C (default: \fB1\fP)
+.TP
+.B \-p \fIepsilon\fP
+Set the epsilon in loss function of epsilon-SVR (default: \fB0.1\fP)
+.TP
+.B \-e \fIepsilon\fP
+Set the tolerance of the termination criterion
+.sp
+\-s 0 and 2:
+.RS 10
+.nf
+.sp
+|f'(w)|_2 <= \fIepsilon\fP*min(pos,neg)/l*|f'(w0)|_2, where f is
+the primal function and pos/neg are the number of positive/negative data
+(default: \fB0.01\fP)
+.fi
+.RE
+.IP
+\-s 11:
+.sp
+.nf
+.RS 10
+|f'(w)|_2 <= epsilon*|f'(w0)|_2 (default \fB0.0001\fP)
+.fi
+.RE
+.IP
+\-s 1, 3, 4 and 7:
+.sp
+.nf
+.RS 10
+Dual maximal violation <= \fIepsilon\fP; similar to libsvm (default: \fB0.1\fP)
+.fi
+.RE
+.IP
+\-s 5 and 6:
+.sp
+.nf
+.RS 10
+|f'(w)|_inf <= \fIepsilon\fP*min(pos,neg)/l*|f'(w0)|_inf, where f is the primal
+function (default: \fB0.01\fP)
+.RE
+.IP
+\-s 12 and 13:
+.sp
+.nf
+.RS 10
+|f'(alpha)|_1 <= epsilon |f'(alpha0)|, where f is the dual function (default \fB0.1\fP)
+.RE
+.TP
+.B \-B \fIbias\fP
+If \fIbias\fP >= 0, then instance x becomes [x; bias]; if \fIbias\fP < 0, then
+no bias term is added (default: \fB-1\fP)
+.TP
+.B \-w\fIi\fP \fIweight\fP
+Weights adjust the parameter C of different classes (see README for details)
+.TP
+.B \-v \fIn\fP
+\fIn\fP-fold cross validation mode
+.TP
+.B \-C
+Find parameters (C for \-s 0, 2 and C, p for \-s 11)
+.TP
+.B \-q
+Quiet mode (no outputs).
+.fi
+.RE
+.sp
+Option \-v randomly splits the data into n parts and calculates
+cross validation accuracy on them.
+
+Option \-C conducts cross validation under different parameters and finds
+the best one. This option is supported only by \-s 0, \-s 2 (for finding C)
+and \-s 11 (for finding C, p). If the solver is not specified, \-s 2 is used.
+.SH EXAMPLES
+.sp
+Train a linear SVM using L2-loss function:
+.sp
+.RS 10
+.nf
+ liblinear-train data_file
+.fi
+.RE
+.sp
+Train a logistic regression model:
+.sp
+.RS 10
+.nf
+ liblinear-train \-s 0 data_file
+.fi
+.RE
+.sp
+Do five-fold cross-validation using L2-loss SVM, using a smaller stopping
+tolerance 0.001 instead of the default 0.1 for more accurate solutions:
+.sp
+.RS 10
+.nf
+ liblinear-train \-v 5 \-e 0.001 data_file
+.fi
+.RE
+.sp
+Conduct cross validation many times by L2-loss SVM and find the parameter
+C which achieves the best cross validation accuracy:
+.sp
+.RS 10
+.nf
+ train \-C datafile
+.fi
+.RE
+.sp
+For parameter selection by \-C, users can specify other
+solvers (currently \-s 0, \-s 2 and \-s 11 are supported) and
+different number of CV folds. Further, users can use
+the \-c option to specify the smallest C value of the
+search range. This option is useful when users want to
+rerun the parameter selection procedure from a specified
+C under a different setting, such as a stricter stopping
+tolerance \-e 0.0001 in the above example. Similarly, for
+\-s 11, users can use the \-p option to specify the
+maximal p value of the search range.
+.sp
+.RS 10
+.nf
+ train \-C \-s 0 \-v 3 \-c 0.5 \-e 0.0001 datafile
+.fi
+.RE
+.sp
+Train four classifiers:
+.RS 18
+.sp
+positive    negative        Cp  Cn
+.br
+class 1     class 2,3,4     20  10
+.br
+class 2     class 1,3,4     50  10
+.br
+class 3     class 1,2,4     20  10
+.br
+class 4     class 1,2,3     10  10
+.RE
+.sp
+.RS 10
+.nf
+ liblinear-train \-c 10 \-w1 2 \-w2 5 \-w3 2 four_class_data_file
+.fi
+.RE
+.sp
+If there are only two classes, we train ONE model. The C values for the two
+classes are 10 and 50:
+.sp
+.RS 10
+.nf
+ liblinear-train \-c 10 \-w3 1 \-w2 5 two_class_data_file
+.fi
+.RE
+.sp
+Output probability estimates (for logistic regression only) using
+\fBliblinear-predict\fP(1):
+.sp
+.RS 10
+.nf
+ liblinear-predict \-b 1 test_file data_file.model output_file
+.fi
+.RE
+.SH SEE ALSO
+.BR liblinear-predict (1),
+.BR svm-predict (1),
+.BR svm-train (1),
+.BR svm-scale (1)
+.SH AUTHORS
+liblinear-train was written by the LIBLINEAR authors at National Taiwan
+university for the LIBLINEAR Project.
+.PP
+This manual page was written by Christian Kastner <ckk@debian.org>
+for the Debian project (and may be used by others).

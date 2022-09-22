@@ -1,0 +1,365 @@
+liblinear (2.3.0+dfsg-5) UNRELEASED; urgency=medium
+
+  * update
+
+ -- Debian Science Maintainers <debian-science-maintainers@lists.alioth.debian.org>  Thu, 19 May 2022 10:16:22 +0800
+
+liblinear (2.3.0+dfsg-5) unstable; urgency=medium
+
+  * d/tests/control: Add python3-all to python3-simple's Depends:.
+    (Closes: #972532)
+  * Add myself to uploaders. 
+
+ -- Michael Hudson-Doyle <mwhudson@debian.org>  Thu, 22 Oct 2020 08:13:03 +1300
+
+liblinear (2.3.0+dfsg-4) unstable; urgency=medium
+
+  * Add autopkgtest for Python package
+  * Add patch Merge-commonutil.py-into-liblinearutil.py.patch (Closes: #958641)
+    - Add python3-liblinear.README.Debian documenting the merge
+  * Bump Standards-Version to 4.5.0 (no changes needed)
+
+ -- Christian Kastner <ckk@debian.org>  Sat, 02 May 2020 10:10:18 +0200
+
+liblinear (2.3.0+dfsg-3) unstable; urgency=medium
+
+  * Team upload.
+  * Packages in Debian Science team should be maintained by
+    <debian-science-maintainers@lists.alioth.debian.org>
+  * Drop Python2 package (addresses: #936889)
+  * Rely on pre-initialized dpkg-architecture variables.
+
+ -- Andreas Tille <tille@debian.org>  Sat, 21 Dec 2019 08:12:33 +0100
+
+liblinear (2.3.0+dfsg-2) unstable; urgency=medium
+
+  * gbp.conf: Drop upstream-tag remnant from earlier setup
+
+ -- Christian Kastner <ckk@debian.org>  Thu, 31 Oct 2019 10:57:42 +0100
+
+liblinear (2.3.0+dfsg-1) experimental; urgency=medium
+
+  * New upstream release.
+    - Bump SONAME from 3 to 4
+      The new release contains backwards-incompatible changes to the API
+    - Refresh manpages
+
+  * d/control: Bump Standards-Version to 4.4.1 (no changes needed)
+  * d/copyright:
+    - Improve DFSG note in Comments
+    - Add Files-Excluded for generating DFSG-cleaned sources
+    - Bump copyrights
+  * d/rules:
+    - Override_dh_missing for --fail-missing
+    - Drop now superfluous get-orig-source target
+  * Update symbols file
+  * d/patches:
+    - Add Bump-SONAME.patch
+    - Refresh patch Improve-option-parsing.patch
+    - Add patch Get-rid-of-bundled-BLAS.patch
+  * d/watch: Add repacksuffix=+dfsg
+  * Drop now superfluous d/source/lintian-overrides
+  * gbp.conf: Get rid of "dfsg" branch; use "upstream" directly
+  * Let dh_install install from debian/tmp, instead of source.
+    Resolves a warning from dh_missing. Thanks, Niels Thykier, for the analysis and
+    resolution!
+
+ -- Christian Kastner <ckk@debian.org>  Tue, 22 Oct 2019 13:00:10 +0200
+
+liblinear (2.1.0+dfsg-4) unstable; urgency=medium
+
+  * Fix copy-pasta in Vcs-* URLs (pointed to wrong project)
+  * Move Python build dependencies to Build-Depends-Indep.
+    Fixes a FTCBFS. Thanks, Helmut Grohne! Closes: #913244
+  * Drop d/*.dirs, the dh_* helpers create directories as needed
+  * Move man pages from d/ to d/man
+  * Drop cruft liblinear-dbg.lintian-overrides
+  * Remove ancient d/python-liblinear.NEWS
+    It's content applies to changes before oldoldstable
+  * Add Rules-Requires-Root: no
+
+ -- Christian Kastner <ckk@debian.org>  Fri, 15 Feb 2019 15:46:34 +0100
+
+liblinear (2.1.0+dfsg-3) unstable; urgency=medium
+
+  * Point Vcs-* to Salsa
+  * Switch to https in Homepage field
+  * Switch Build-Depends from debhelper to debhelper-compat
+  * Bump Build-Depends for debhelper-compat to 12
+  * Remove now obsolete d/compat
+  * Drop ancient X-Python{,3}-Version
+  * Bump Standards-Version to 4.3.0
+  * d/copyright: Switch to https in Format and Source fields
+  * d/rules:
+    - Drop override_dh_compress
+      examples/ aren't compressed in compat 12
+    - Use DEB_VERSION_UPSTREAM from dpkg-pkg-info.mk instead of parsing
+      d/changelog
+    - Drop override_dh_strip
+      It was only needed for the dbgsym migration
+  * d/liblinear3.symbols: Add Build-Depends-Package field
+  * d/tests: Rename ADTTMP to AUTOPKGTEST_TMP
+  * gbp.conf:
+    - Set upstream-branch to dfsg
+    - gbp.conf: Add pristine-tar, sign-tags options
+  * d/source/lintian-overrides:
+    - Remove tag debian-watch-file-is-missing, it has been re-classified as
+      experimental
+    - Add tag debian-rules-contains-unnecessary-get-orig-source-target
+      False-positive. We do call uscan, but we filter and modify files, so a
+      simple File-Excluded in d/copyright won't suffice
+  * d/watch:
+    - Update to format version 4
+    - Switch to https in URL
+
+ -- Christian Kastner <ckk@debian.org>  Thu, 14 Feb 2019 20:13:53 +0100
+
+liblinear (2.1.0+dfsg-2) unstable; urgency=medium
+
+  * Drop package libocas-dbg in favor of automatic dbgsym packages, as per
+    https://lists.debian.org/debian-devel/2015/12/msg00262.html
+  * d/patches (updated):
+    - Properly-build-shared-and-static-libraries-programs.
+      Filter out -pie, -fpie, and -fPIE when building the shared library so
+      that hardening=+all can be used
+  * d/rules:
+    - Add hardening=+all to DEB_BUILD_MAINT_OPTIONS
+    - Improve version number parsing
+  * d/copyright:
+    - Bump copyright years
+  * d/control:
+    - Bump Standards-Version to 3.9.8 (no changes needed)
+    - Switch to secure URIs in Vcs-* fields
+
+ -- Christian Kastner <ckk@debian.org>  Sun, 24 Apr 2016 16:55:04 +0200
+
+liblinear (2.1.0+dfsg-1) unstable; urgency=medium
+
+  * New upstream release.
+  * Versioning scheme has been changed to better work with upstream's
+  * d/control:
+    - Build-Depend on python*-all, not python*-all-dev. This was a remnant from
+      when the package was still arch:any. Closes: #799231
+    - Switch Vcs-Browser from gitweb to cgit
+  * d/watch:
+    - Redo mangling: Convert upstream version to x.y.z format
+  * d/rules:
+    - Update get-orig-source for new x.y.z versioning scheme
+  * liblinear3:
+    - Drop symbol l2r_l2_svc_fun::subXv. No SONAME bump, as this symbol wasn't
+      visible outside of experimental
+  * d/patches (updated):
+    - Properly-build-shared-and-static-libraries-programs.patch
+      Makes use of the new versioning scheme
+
+ -- Christian Kastner <ckk@debian.org>  Sun, 01 Nov 2015 17:14:30 +0100
+
+liblinear (2.01+dfsg-1) experimental; urgency=medium
+
+  * New upstream release. Closes: #780528
+  * The SONAME was bumped, so rename package liblinear1 to liblinear3
+  * d/liblinear3.symbols:
+    - Update for the new library version
+  * d/control:
+    - Switch Maintainer to my @debian.org address
+  * d/watch:
+    - Update to look for tarball instead of zip
+  * d/rules:
+    - Simplify upstream version extraction/utilization
+    - Update get-orig-source target
+    - Use xz compression when repacking the upstream source
+    - Drop override_dh_makeshlibs which was only needed for lenny
+  * d/copyright:
+    - Bump copyright years
+  * d/gbp.conf:
+    - Update for xz compression
+    - Update for patches without numbers
+  * d/TODO:
+    - Drop, as no open TODOs remain
+  * d/liblinear-predict.1
+    d/liblinear-train.1:
+    - Update manpages
+  * d/patches:
+    - Drop patch numbers from .patch filenames
+  * d/patches (updated):
+    - Properly-build-shared-and-static-libraries-programs.patch
+    - Improve-option-parsing.patch
+  * d/patches (dropped):
+    - Documenation-fixes.patch
+      Included upstream
+
+ -- Christian Kastner <ckk@debian.org>  Sat, 05 Sep 2015 22:23:51 +0200
+
+liblinear (1.8+dfsg-5) unstable; urgency=medium
+
+  * Add package python3-liblinear.
+  * debian/control:
+    - Bump Standards-Version to 3.9.6 (no changes needed)
+    - Drop XS-Testsuite. dpkg now recognizes the Testsuite header, and
+      dpkg-source automatically adds one when an autopkgtest suite is found
+    - Add Build-Depends for dh-python
+    - Add Build-Depends for python3-all-dev
+    - Add X-Python3-Version of 3.0
+  * debian/rules:
+    - Make dh also build with dh_python3
+  * debian/liblinear1.symbols: Mark symbol optimized away by GCC 5 as optional,
+    thereby fixing a FTBFS. Closes: #790248
+  * debian/copyright:
+    - Bump copyright years
+
+ -- Christian Kastner <debian@kvr.at>  Wed, 22 Jul 2015 17:11:54 +0200
+
+liblinear (1.8+dfsg-4) unstable; urgency=medium
+
+  * Migrate repo to Debian-Science at git.debian.org
+  * debian/control:
+    - Update Vcs-* URLs to point to new location
+    - Add XS-Testsuite for autopkgtest
+    - python-liblinear is arch:all, not arch:any. Thanks, Vincent Cheng
+  * debian/tests/*:
+    - Define an autopkgtest that runs the examples from the documentation
+  * debian/patches (updated):
+    - 0006-Improve-option-parsing
+      Fix wrong function call in float parsing (for epsilon value, etc.). As a
+      result of copy-pasta, strtol() was being used where strtof() was needed.
+
+ -- Christian Kastner <debian@kvr.at>  Tue, 26 Aug 2014 10:35:07 -0700
+
+liblinear (1.8+dfsg-3) unstable; urgency=low
+
+  * debian/symbols:
+    - Declare an empty virtual destructor as optional symbol; gcc-4.9 no longer
+      generates it. Fixes a FTBFS. Closes: #753227
+  * debian/control:
+    - Add Multi-Arch fields to packages where necessary
+    - Add Pre-Depends for package liblinear1
+  * debian/rules:
+    - Install to multi-arch destinations using DEB_HOST_MULTIARCH
+  * debian/*.install:
+    - Update paths as a consequence of the new install target and
+      multi-arch-ification
+  * debian/patches (updated):
+    - 0001-Properly-build-shared-and-static-libraries-programs
+      Add an install target to upstream's Makefile, with configurable
+      destinations for libraries and executables
+
+ -- Christian Kastner <debian@kvr.at>  Sat, 26 Jul 2014 23:11:03 +0200
+
+liblinear (1.8+dfsg-2) unstable; urgency=low
+
+  * debian/control:
+    - Demoted liblinear1's Recommends for liblinear-tools to Suggests, so
+      packages depending only on the library don't pull in the tools.
+      Closes: #682062
+    - Demoted liblinear-tools' Recommends for libsvm-tools to Suggests, for the
+      same reasons. Closes: #679992
+    - Bumped Standards-Version to 3.9.5 (no changes needed)
+    - Bumped debhelper compatibility version to recommended level 9
+    - Dropped dependency on python-support, and added a dependency on
+      python-all-dev (>= 2.6.6-3~) for dh_python2, as well as added
+      X-Python-Version >= 2.5. Closes: #679993
+    - Updated BLAS dependency to libblas-dev | libblas.so, the currently
+      recommended approach.
+  * debian/compat:
+    - Raised debhelper compatibility level to recommended level 9
+  * debian/rules:
+    - Converted to dh_python2
+    - Fixed get-orig-rules target in debian/rules. The generated tarball did
+      not match the git version
+    - Use DEB_CFLAGS_MAINT_APPEND, as recommended, instead of CFLAGS
+  * debian/copyright:
+    - Updated to machine-readable copyright format 1.0
+  * debian/gbp.conf
+    - Created (package is based on dfsg branch, not upstream)
+  * debian/patches (new):
+     - 0006-Improve-option-parsing
+       Use optarg, avoid atoi, verify argument count. Closes: #716115
+  * debian/patches (modified):
+    - 0001-Properly-build-shared-and-static-libraries-programs
+      Include CPPFLAGS to avoid hardening flag warnings
+  * debian/source/lintian-overrides:
+    - Added override for debian-watch-may-check-gpg-signature
+  * debian/*.lintian-overrides:
+    - Added overrides for no-upstream-changelog
+ -- Christian Kastner <debian@kvr.at>  Wed, 19 Feb 2014 11:21:06 +0100
+
+liblinear (1.8+dfsg-1) unstable; urgency=low
+
+  * New upstream release.
+  * debian/control:
+    - Added Chen-Tse Tsai <ctse.tsai@gmail.com> to Uploaders
+    - Bumped Standards-Version to 3.9.2 (no changes needed)
+  * debian/python-liblinear.install
+    debian/rules:
+    - Dropped the override for dh_install in favor of python-liblinear.install
+      Previously, this was not possible because we had to rename files
+  * debian/watch:
+    - Rewrote version mangling. Now only the upstream version needs to be
+      mangled. The previous approach didn't work well together with DEHS
+  * debian/copyright:
+    - Refreshed upstream's copyright
+    - Fixed the previous refresh of my packaging copyright (don't drop 2010)
+    - Refreshed DEP5 format to r173
+  * debian/python-liblinear.README.Debian
+    - Refreshed to reflect that we are now upstream-compatible again
+  * debian/patches refreshed:
+    - 0001-Properly-build-shared-and-static-libraries-programs
+      Fixed a (harmless) missing definition. Also, patch now applies against
+      orig tarball created with get-orig-source. The orig tarball previously
+      created manually differed slightly (whitespace in Makefile)
+  * debian/patches dropped (implemented/included upstream):
+    - 0003-Add-missing-solver-to-Python-bindings
+    - 0004-Python-namespace-change.patch
+  * debian/patches added:
+    - 0005-Documentation-fix.patch
+      Mismatch between documented formulas
+
+ -- Christian Kastner <debian@kvr.at>  Tue, 05 Apr 2011 14:23:37 +0200
+
+liblinear (1.7+dfsg-1) unstable; urgency=low
+
+  * New upstream release. Closes: #609380
+  * python-liblinear:
+    - NAMESPACE CHANGE. In anticipation of upstream's namespace switch for the
+      next release, our own namespace switch (which broke compatibility) was
+      modified to conform to it.
+    - Added NEWS file indicating namespace change
+    - Updated README.Debian indicating namespace change
+  * debian/control:
+    - Bumped Standards-Version to 3.9.1 (no changes needed)
+    - Modified Depends: of liblinear-dev to support alternative BLAS
+      implementations
+    - Fixed broken Vcs-Browser URL.
+  * debian/copyright:
+    - Refreshed DEP5-format to r166
+    - Refreshed copyrights
+    - Added Disclaimer for the modifications made during DFSG-cleaning
+    - Relicense all of my contributions to BSD-3-clause to facilitate possible
+      inclusions in upstream
+  * debian/liblinear1.symbols:
+    - Added new symbols
+    - Removed the unnecessary dfsg suffix
+  * debian/rules:
+    - Added target get-orig-source
+    - Don't hardcode CFLAGs; honor dpkg-buildflags
+    - On systems with a dpkg-dev (<< 1.15.6), the symbols file is removed prior
+      before dh_makeshlibs runs. This is a convenience solution for backporters
+      on platforms where the c++ tags would otherwise cause build failures.
+      This is temporary solution.
+  * debian/patches:
+    - Added 0003-Add-missing-solver-to-Python-bindings
+    - Dropped 0002-Move-Python-bindings-to-package-liblinear
+    - Added 0004-Python-namespace-change.patch
+      (i.e., the old namespace switch was dropped, and the new one implemented
+      as a fresh patch)
+
+ -- Christian Kastner <debian@kvr.at>  Fri, 11 Mar 2011 19:30:51 +0100
+
+liblinear (1.6+dfsg-1) unstable; urgency=low
+
+  * Initial release (Closes: #585788)
+  * debian/patches:
+    - 0001-Properly-build-shared-and-static-libraries-programs
+    - 0002-Move-Python-bindings-to-package-liblinear
+
+ -- Christian Kastner <debian@kvr.at>  Fri, 09 Jul 2010 21:45:57 +0200

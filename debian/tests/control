@@ -1,0 +1,5 @@
+Tests: executables
+Depends: liblinear-tools
+
+Tests: python3-simple
+Depends: python3-all, python3-liblinear

@@ -1,0 +1,47 @@
+.\"                                      Hey, EMACS: -*- nroff -*-
+.TH LIBLINEAR-PREDICT 1 "Ocotber 21, 2019"
+.SH NAME
+liblinear-predict \- Make predictions based on a trained linear classifier model
+.SH SYNOPSIS
+.B linear-predict
+.RI [ options ] " test_file " "\fImodel_file\fP " \fIoutput_file\fP
+.br
+.SH DESCRIPTION
+\fBliblinear-predict\fP uses the linear classifier \fImodel-file\fP to make
+predictions for each of the samples in \fItest_file\fP and stores the results
+in \fIoutput_file\fP.
+.SH OPTIONS
+A summary of options is included below.
+.TP
+.B \-b \fI(0|1)\fP
+Whether to output probability estimates or not (default: \fB0\fP)
+.TP
+.B \-q
+quiet mode (no outputs)
+.SH EXAMPLES
+Train a linear SVM using L2-loss function with \fBlinear-train\fP(1):
+.sp
+.RS 10
+.nf
+ liblinear-train data_file
+.fi
+.RE
+.sp
+Output probability estimates (for logistic regression only):
+.sp
+.RS 10
+.nf
+ liblinear-predict \-b 1 test_file data_file.model output_file
+.fi
+.RE
+.SH SEE ALSO
+.BR liblinear-train (1),
+.BR svm-predict (1),
+.BR svm-train (1),
+.BR svm-scale (1)
+.SH AUTHORS
+liblinear-predict was written by the LIBLINEAR authors at National Taiwan
+university for the LIBLINEAR Project.
+.PP
+This manual page was written by Christian Kastner <ckk@debian.org>,
+for the Debian project (and may be used by others).

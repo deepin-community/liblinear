@@ -1,0 +1,25 @@
+From: Christian Kastner <ckk@kvr.at>
+Date: Tue, 22 Oct 2019 00:00:11 +0200
+Subject: Bump-SONAME
+
+The new release contains backwards-incompatible changes to the API.
+
+Forwarded: https://github.com/cjlin1/liblinear/pull/60
+Last-Updated: 2020-02-15
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index 6f0a0f9..94fb378 100644
+--- a/Makefile
++++ b/Makefile
+@@ -3,7 +3,7 @@ CC ?= gcc
+ CFLAGS +=
+ LDFLAGS += -L.
+ LIBS +=
+-SHVER = 3
++SHVER = 4
+ 
+ # Libraries must not be compiled/linked with -pie, -fpie or -FPIE
+ LIB_CFLAGS += $(filter-out -fPIE,$(CFLAGS)) -fPIC

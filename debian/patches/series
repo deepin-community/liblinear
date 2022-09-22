@@ -1,0 +1,5 @@
+Get-rid-of-BLAS.patch
+Properly-build-shared-and-static-libraries-programs.patch
+Improve-option-parsing.patch
+Bump-SONAME.patch
+Merge-commonutil.py-into-liblinearutil.py.patch

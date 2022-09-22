@@ -1,0 +1,16 @@
+version=4
+
+# Upstream's versioning scheme is 1.0, 1.01, 1.1, 1.11, 1.12, etc., so we
+# mangle it by converting it to x.y.z pattern:
+#  1.0   -> 1.0.0
+#  1.01  -> 1.0.1
+#  1.1   -> 1.1.0
+#  1.11  -> 1.1.1
+#  1.12  -> 1.1.2
+#  etc
+
+opts=\
+uversionmangle=s/(\d\.\d)$/${1}0/;s/(\d)\.(\d)(\d)/${1}\.${2}\.${3}/,\
+dversionmangle=s/\+dfsg//,\
+repacksuffix=+dfsg \
+https://www.csie.ntu.edu.tw/~cjlin/liblinear/oldfiles/liblinear-(.*)\.tar\.gz

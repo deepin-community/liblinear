@@ -1,0 +1,198 @@
+From: Christian Kastner <ckk@kvr.at>
+Date: Tue, 18 Feb 2014 17:57:16 +0100
+Subject: Improve option parsing
+
+Detect errors when parsing numeric arguments, check for the right number of
+arguments, and use optarg(3) if possible.
+
+Bug-Debian: http://bugs.debian.org/716115
+Forwarded: yes
+Last-Update: 2019-10-21
+---
+ predict.c | 51 +++++++++++++++++++++++++++------------------------
+ train.c   | 46 ++++++++++++++++++++++++++++++++++++++--------
+ 2 files changed, 65 insertions(+), 32 deletions(-)
+
+Index: liblinear/predict.c
+===================================================================
+--- liblinear.orig/predict.c
++++ liblinear/predict.c
+@@ -3,6 +3,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <errno.h>
++#include <unistd.h>
+ #include "linear.h"
+ 
+ int print_null(const char *s,...) {return 0;}
+@@ -186,48 +187,50 @@ void exit_with_help()
+ int main(int argc, char **argv)
+ {
+ 	FILE *input, *output;
+-	int i;
++	int opt;
+ 
+ 	// parse options
+-	for(i=1;i<argc;i++)
+-	{
+-		if(argv[i][0] != '-') break;
+-		++i;
+-		switch(argv[i-1][1])
+-		{
+-			case 'b':
+-				flag_predict_probability = atoi(argv[i]);
+-				break;
+-			case 'q':
+-				info = &print_null;
+-				i--;
+-				break;
+-			default:
+-				fprintf(stderr,"unknown option: -%c\n", argv[i-1][1]);
++	while ((opt = getopt(argc, argv, "b:q")) != -1) {
++		switch(opt) {
++		case 'b':
++			if (strcmp(optarg, "0") == 0) {
++				flag_predict_probability = 0;
++			} else if (strcmp(optarg, "1") == 0) {
++				flag_predict_probability = 1;
++			} else {
+ 				exit_with_help();
+-				break;
++			}
++			break;
++		case 'q':
++			info = &print_null;
++			break;
++		default:
++			exit_with_help();
++			break;
+ 		}
+ 	}
+-	if(i>=argc)
++
++	// Besides options, we expect exactly 3 arguments
++	if(optind+3 != argc)
+ 		exit_with_help();
+ 
+-	input = fopen(argv[i],"r");
++	input = fopen(argv[optind],"r");
+ 	if(input == NULL)
+ 	{
+-		fprintf(stderr,"can't open input file %s\n",argv[i]);
++		fprintf(stderr,"can't open input file %s\n",argv[optind]);
+ 		exit(1);
+ 	}
+ 
+-	output = fopen(argv[i+2],"w");
++	output = fopen(argv[optind+2],"w");
+ 	if(output == NULL)
+ 	{
+-		fprintf(stderr,"can't open output file %s\n",argv[i+2]);
++		fprintf(stderr,"can't open output file %s\n",argv[optind+2]);
+ 		exit(1);
+ 	}
+ 
+-	if((model_=load_model(argv[i+1]))==0)
++	if((model_=load_model(argv[optind+1]))==0)
+ 	{
+-		fprintf(stderr,"can't open model file %s\n",argv[i+1]);
++		fprintf(stderr,"can't open model file %s\n",argv[optind+1]);
+ 		exit(1);
+ 	}
+ 
+Index: liblinear/train.c
+===================================================================
+--- liblinear.orig/train.c
++++ liblinear/train.c
+@@ -4,6 +4,7 @@
+ #include <string.h>
+ #include <ctype.h>
+ #include <errno.h>
++#include <limits.h>
+ #include "linear.h"
+ #define Malloc(type,n) (type *)malloc((n)*sizeof(type))
+ #define INF HUGE_VAL
+@@ -61,6 +62,34 @@ void exit_input_error(int line_num)
+ 	exit(1);
+ }
+ 
++static long strtol_or_exit(const char *str) {
++	errno = 0;
++	char *endptr;
++	long val = strtol(str, &endptr, 10);
++
++	if ((errno == ERANGE && (val == LONG_MAX || val == LONG_MIN)) || (errno != 0 && val == 0)) {
++		perror("error converting %s to int:");
++		exit_with_help();
++	} else if (*endptr != '\0') {
++		exit_with_help();
++	}
++	return val;
++}
++
++static float strtof_or_exit(const char *str) {
++	errno = 0;
++	char *endptr;
++	float val = strtof(str, &endptr);
++
++	if ((errno == ERANGE && (val == HUGE_VALF || val == HUGE_VALL)) || (errno != 0 && val == 0.0)) {
++		perror("error converting %s to float:");
++		exit_with_help();
++	} else if (*endptr != '\0') {
++		exit_with_help();
++	}
++	return val;
++}
++
+ static char *line = NULL;
+ static int max_line_len;
+ 
+@@ -233,39 +262,40 @@ void parse_command_line(int argc, char *
+ 		switch(argv[i-1][1])
+ 		{
+ 			case 's':
+-				param.solver_type = atoi(argv[i]);
++				param.solver_type = strtol_or_exit(argv[i]);
+ 				flag_solver_specified = 1;
+ 				break;
+ 
+ 			case 'c':
+-				param.C = atof(argv[i]);
++				param.C = strtof_or_exit(argv[i]);
+ 				flag_C_specified = 1;
+ 				break;
+ 
+ 			case 'p':
+ 				flag_p_specified = 1;
+-				param.p = atof(argv[i]);
++				param.p = strtof_or_exit(argv[i]);
+ 				break;
+ 
+ 			case 'e':
+-				param.eps = atof(argv[i]);
++				param.eps = strtof_or_exit(argv[i]);
+ 				break;
+ 
+ 			case 'B':
+-				bias = atof(argv[i]);
++				bias = strtof_or_exit(argv[i]);
+ 				break;
+ 
+ 			case 'w':
+ 				++param.nr_weight;
+ 				param.weight_label = (int *) realloc(param.weight_label,sizeof(int)*param.nr_weight);
+ 				param.weight = (double *) realloc(param.weight,sizeof(double)*param.nr_weight);
+-				param.weight_label[param.nr_weight-1] = atoi(&argv[i-1][2]);
+-				param.weight[param.nr_weight-1] = atof(argv[i]);
++				param.weight_label[param.nr_weight-1] = strtol_or_exit(&argv[i-1][2]);
++				param.weight[param.nr_weight-1] =
++					strtof_or_exit(argv[i]);
+ 				break;
+ 
+ 			case 'v':
+ 				flag_cross_validation = 1;
+-				nr_fold = atoi(argv[i]);
++				nr_fold = strtol_or_exit(argv[i]);
+ 				if(nr_fold < 2)
+ 				{
+ 					fprintf(stderr,"n-fold cross validation: n must >= 2\n");

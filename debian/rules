@@ -1,0 +1,44 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+# For DEB_VERSION_UPSTREAM
+include /usr/share/dpkg/pkg-info.mk
+
+# Needed for our Makefile customizations
+DMAJOR := $(shell echo $(DEB_VERSION_UPSTREAM) | sed -rne 's/([0-9])\.[0-9]\.[0-9].*/\1/p')
+DMINOR := $(shell echo $(DEB_VERSION_UPSTREAM) | sed -rne 's/[0-9]\.([0-9])\.[0-9].*/\1/p')
+DPATCH := $(shell echo $(DEB_VERSION_UPSTREAM) | sed -rne 's/[0-9]\.[0-9]\.([0-9]).*/\1/p')
+# Replicate upstream's naming convention... (see d/watch)
+ifeq ($(DPATCH),0)
+    UPVER := $(DMAJOR).$(DMINOR)
+else
+    UPVER := $(DMAJOR).$(DMINOR)$(DPATCH)
+endif
+export UPVER DEBVER DMAJOR DMINOR DPATCH
+
+
+export DEB_BUILD_MAINT_OPTIONS += hardening=+all
+export DEB_CFLAGS_MAINT_APPEND += -Wall
+
+ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+ifeq (amd64,$(DEB_HOST_ARCH))
+    DEB_CFLAGS_MAINT_APPEND += -msse
+endif
+endif
+
+include /usr/share/dpkg/architecture.mk
+
+
+%:
+	dh $@ $(DH_ADDONS)
+build binary %-indep: DH_ADDONS=--with=python3
+
+
+override_dh_auto_install:
+	dh_auto_install -- libdir=/usr/lib/$(DEB_HOST_MULTIARCH)/
+
+override_dh_missing:
+	dh_missing --fail-missing
